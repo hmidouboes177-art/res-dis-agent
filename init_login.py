@@ -2,8 +2,7 @@
 from playwright.sync_api import sync_playwright
 import os
 
-# 定义一个目录用于存放服务器原生的 Chrome 数据（必须对该目录有读写权限）
-USER_DATA_DIR = "/root/reddit-new/chrome_data"
+from browser_config import USER_DATA_DIR, get_proxy_config
 
 def setup_initial_login():
     os.makedirs(USER_DATA_DIR, exist_ok=True)
@@ -17,12 +16,8 @@ def setup_initial_login():
             # 1. 解决自签名证书拦截问题
             ignore_https_errors=True,
 
-            # 2. 解决代理认证 (ERR_INVALID_AUTH_CREDENTIALS) 问题
-            proxy={
-                "server": "xxx",  # 例如: "http://192.168.1.100:8080"
-                "username": "xxx",             # 如果代理不需要密码，把 username 和 password 删掉
-                "password": "xxx"
-            },
+            # 2. 可选代理配置（通过环境变量控制）
+            proxy=get_proxy_config(),
 
             args=[
                 "--remote-debugging-port=9222",

@@ -1,8 +1,8 @@
 from playwright.sync_api import sync_playwright
 import time
 import urllib.parse
-# ⚠️ 注意替换为你实际的路径
-USER_DATA_DIR = "/root/reddit-new/chrome_data" 
+
+from browser_config import USER_DATA_DIR, get_proxy_config
 
 
 def auto_search(keyword):
@@ -12,11 +12,7 @@ def auto_search(keyword):
             user_data_dir=USER_DATA_DIR,
             headless=False,  
             ignore_https_errors=True, 
-            proxy={
-                "server": "xxx",  # 例如: "http://192.168.1.100:8080"
-                "username": "xxx",             # 如果代理不需要密码，把 username 和 password 删掉
-                "password": "xxx"
-            },
+            proxy=get_proxy_config(),
             args=["--ignore-certificate-errors"],
             slow_mo=50,
             viewport={'width': 1280, 'height': 800},
